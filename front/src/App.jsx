@@ -1,34 +1,52 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import './App.css'
+//MDB IMPORTS
+import "mdbreact/dist/css/mdb.css";
+import "@fortawesome/fontawesome-free/css/all.min.css";
+import "bootstrap-css-only/css/bootstrap.min.css";
+// REACT IMPORTS
+import { useState } from "react";
+// MUI IMPORTS
+import Tab from "@mui/material/Tab";
+import Tabs from "@mui/material/Tabs";
+import Box from "@mui/material/Box";
+// COMPONENTS IMPORTS
+import TabPanel from "./components/TabPanel";
+import Municipios from "./pages/municipios";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [value, setValue] = useState(0);
+
+  const handleChange = (_, newValue) => {
+    setValue(newValue);
+  };
 
   return (
-    <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+    <div>
+      <Box
+        sx={{
+          borderBottom: 1,
+          borderColor: "divider",
+          position: "fixed",
+          background: "white",
+          width: "100%",
+        }}
+      >
+        <Tabs value={value} onChange={handleChange} aria-label="Page Tabs">
+          <Tab label="Municipios" />
+          <Tab label="Viviendas" />
+          <Tab label="Personas" />
+        </Tabs>
+      </Box>
+      <TabPanel value={value} index={0}>
+        <Municipios />
+      </TabPanel>
+      <TabPanel value={value} index={1}>
+        <Municipios />
+      </TabPanel>
+      <TabPanel value={value} index={2}>
+        <Municipios />
+      </TabPanel>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
