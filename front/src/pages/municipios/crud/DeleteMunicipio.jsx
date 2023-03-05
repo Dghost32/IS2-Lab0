@@ -69,7 +69,7 @@ const DeleteMunicipio = () => {
               dangerMode: true,
             });
             if (check) {
-              del.mutate(value?.id);
+              del.mutate({ id: value?.id });
             }
           }
         }}
