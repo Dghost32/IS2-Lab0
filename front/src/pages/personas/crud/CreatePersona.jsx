@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import swal from "sweetalert";
 import { crearMunicipio } from "../../../fetchers/municipios";
 
-const CreateMunicipio = () => {
+const CreatePersona = () => {
   const [nombre, setNombre] = useState("");
 
   const mutation = useMutation({
@@ -14,10 +14,6 @@ const CreateMunicipio = () => {
         title: "Municipio creado",
         text: "El municipio se ha creado correctamente",
         icon: "success",
-      });
-
-      QueryClient.invalidateQueries({
-        queryKey: ["municipios"],
       });
     },
     onError: async (error) => {
@@ -37,7 +33,7 @@ const CreateMunicipio = () => {
 
   return (
     <>
-      <h1 className="text-3xl font-bold mb-2">Crear Municipio</h1>
+      <h1 className="text-3xl font-bold mb-2">Crear Persona</h1>
 
       <form onSubmit={handleSubmit}>
         <label htmlFor="nombre">Nombre</label>
@@ -63,4 +59,4 @@ const CreateMunicipio = () => {
   );
 };
 
-export default CreateMunicipio;
+export default CreatePersona;

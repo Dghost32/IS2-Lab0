@@ -11,6 +11,8 @@ import Box from "@mui/material/Box";
 // COMPONENTS IMPORTS
 import TabPanel from "./components/TabPanel";
 import Municipios from "./pages/municipios";
+import Personas from "./pages/personas";
+import Viviendas from "./pages/viviendas";
 
 function App() {
   const [value, setValue] = useState(0);
@@ -40,10 +42,10 @@ function App() {
         <Municipios />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <Municipios />
+        <Viviendas />
       </TabPanel>
       <TabPanel value={value} index={2}>
-        <Municipios />
+        <Personas />
       </TabPanel>
     </div>
   );
