@@ -2,13 +2,14 @@ import { Button, TextField } from "@mui/material";
 import { useMutation } from "@tanstack/react-query";
 import React, { useState } from "react";
 import swal from "sweetalert";
-import { crearMunicipio } from "../../../fetchers/municipios";
+import { crearPersona } from "../../../fetchers/personas";
 
 const CreatePersona = () => {
   const [nombre, setNombre] = useState("");
+  const [edad, setEdad] = useState(0);
 
-  const mutation = useMutation({
-    mutationFn: crearMunicipio,
+  const create = useMutation({
+    mutationFn: crearPersona,
     onSuccess: async () => {
       await swal({
         title: "Municipio creado",
@@ -28,7 +29,7 @@ const CreatePersona = () => {
   function handleSubmit(e) {
     e.preventDefault();
     console.log(`creando municipio ${nombre}`);
-    mutation.mutate({ nombre });
+    create.mutate({ nombre, edad });
   }
 
   return (
@@ -49,6 +50,22 @@ const CreatePersona = () => {
           }}
           value={nombre}
           onChange={(e) => setNombre(e.target.value)}
+        />
+
+        <label htmlFor="edad">Edad</label>
+        <TextField
+          name="edad"
+          id="outlined-basic"
+          variant="outlined"
+          size="small"
+          type="number"
+          style={{
+            margin: "0 0 1rem 0",
+            width: "100%",
+            fontFamily: "'Noto Sans JP', sans-serif",
+          }}
+          value={edad}
+          onChange={(e) => setEdad(e.target.value)}
         />
 
         <Button disabled={!nombre} variant="contained" type="submit">

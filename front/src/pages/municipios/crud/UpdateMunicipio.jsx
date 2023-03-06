@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { QueryClient, useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Autocomplete, Skeleton, TextField, Button } from "@mui/material";
 import { getMunicipios, updateMunicipio } from "../../../fetchers/municipios";
 import swal from "sweetalert";
@@ -7,6 +7,8 @@ import swal from "sweetalert";
 const UpdateMunicipio = () => {
   const [newName, setNewName] = useState("");
   const [municipio, setMunicipio] = useState();
+
+  const QueryClient = useQueryClient();
 
   const municipios = useQuery({
     queryKey: ["municipios"],
@@ -62,11 +64,11 @@ const UpdateMunicipio = () => {
 
       <Autocomplete
         options={municipios.data}
-        getOptionLabel={(option) => option?.name}
+        getOptionLabel={(option) => option?.nombre}
         value={municipio}
         onChange={(_, value) => {
           setMunicipio(value);
-          setNewName(value?.name);
+          setNewName(value?.nombre);
         }}
         noOptionsText="Sin resultados"
         renderInput={(params) => (
@@ -119,7 +121,11 @@ const UpdateMunicipio = () => {
             value={newName}
             onChange={(e) => setNewName(e.target.value)}
           />
-          <Button disabled={!newName || municipio?.name === newName} variant="contained" type="submit">
+          <Button
+            disabled={!newName || municipio?.name === newName}
+            variant="contained"
+            type="submit"
+          >
             Actualizar
           </Button>
         </form>

@@ -39,7 +39,7 @@ const CreateVivienda = () => {
   function handleSubmit(e) {
     e.preventDefault();
     console.log(`creando vivienda ${address}`);
-    crear.mutate({ address, idMunicipio: municipio.id });
+    crear.mutate({ direccion: address, idMunicipio: municipio.id });
   }
 
   return (
