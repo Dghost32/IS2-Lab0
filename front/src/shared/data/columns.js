@@ -8,7 +8,7 @@ export const municipios_cols = [
     },
     {
         label: "name",
-        field: "name",
+        field: "nombre",
         sort: "asc",
         minimal: "lg",
         isVisible: true,

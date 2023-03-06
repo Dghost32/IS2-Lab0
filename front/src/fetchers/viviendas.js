@@ -1,8 +1,8 @@
 import axios from "axios";
 
-export async function crearVivienda({ address, idMunicipio }) {
+export async function crearVivienda({ direccion, idMunicipio }) {
   return await axios.post("http://localhost:3001/viviendas", {
-    address,
+    direccion,
     idMunicipio,
   });
 }

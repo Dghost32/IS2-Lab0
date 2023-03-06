@@ -1,12 +1,12 @@
 import { Button, TextField } from "@mui/material";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import React, { useState } from "react";
 import swal from "sweetalert";
 import { crearMunicipio } from "../../../fetchers/municipios";
 
 const CreateMunicipio = () => {
   const [nombre, setNombre] = useState("");
-
+  const QueryClient = useQueryClient();
   const mutation = useMutation({
     mutationFn: crearMunicipio,
     onSuccess: async () => {

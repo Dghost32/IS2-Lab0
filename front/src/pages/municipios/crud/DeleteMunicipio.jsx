@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { QueryClient, useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Autocomplete, Skeleton, TextField, Button } from "@mui/material";
 import { deleteMunicipio, getMunicipios } from "../../../fetchers/municipios";
 import swal from "sweetalert";
@@ -9,6 +9,8 @@ const DeleteMunicipio = () => {
     queryKey: ["municipios"],
     queryFn: getMunicipios,
   });
+
+  const QueryClient = useQueryClient();
 
   const del = useMutation({
     mutationFn: deleteMunicipio,
@@ -57,13 +59,13 @@ const DeleteMunicipio = () => {
 
       <Autocomplete
         options={municipios.data}
-        getOptionLabel={(option) => option?.name}
-        value={{ name: "Seleccione un municipio para eliminarlo" }}
+        getOptionLabel={(option) => option?.nombre}
+        value={{ nombre: "Seleccione un municipio para eliminarlo" }}
         onChange={async (_, value) => {
           if (value) {
             const check = await swal({
               title: "¿Estás seguro?",
-              text: `Se eliminará el municipio ${value?.name}`,
+              text: `Se eliminará el municipio ${value?.nombre}`,
               icon: "warning",
               buttons: true,
               dangerMode: true,
