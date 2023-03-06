@@ -1,10 +1,12 @@
 import React from "react";
-import { QueryClient, useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Autocomplete, Skeleton, TextField, Button } from "@mui/material";
 import swal from "sweetalert";
 import { deleteVivienda, getViviendas } from "../../../fetchers/viviendas";
 
 const DeleteVivienda = () => {
+  const QueryClient = useQueryClient();
+
   const viviendas = useQuery({
     queryKey: ["viviendas"],
     queryFn: getViviendas,
@@ -57,13 +59,15 @@ const DeleteVivienda = () => {
 
       <Autocomplete
         options={viviendas.data}
-        getOptionLabel={(option) => option?.name}
+        getOptionLabel={(option) =>
+          option?.direccion ? `${option.direccion} - ${option.municipio}` : ""
+        }
         value={{ name: "Seleccione una vivienda para eliminarlo" }}
         onChange={async (_, value) => {
           if (value) {
             const check = await swal({
               title: "¿Estás seguro?",
-              text: `Se eliminará la vivienda ${value?.name}`,
+              text: `Se eliminará la vivienda ${value.direccion} - ${value.municipio}`,
               icon: "warning",
               buttons: true,
               dangerMode: true,

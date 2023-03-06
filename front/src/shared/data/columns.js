@@ -25,7 +25,7 @@ export const viviendas_cols = [
     },
     {
         label: "Address",
-        field: "name",
+        field: "direccion",
         sort: "asc",
         minimal: "lg",
         isVisible: true,

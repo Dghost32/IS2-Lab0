@@ -12,9 +12,10 @@ export async function getViviendas() {
   return data.data;
 }
 
-export async function updateVivienda({ id, nombre }) {
+export async function updateVivienda({ id, direccion, idMunicipio }) {
   return await axios.put(`http://localhost:4000/viviendas/${id}`, {
-    nombre,
+    direccion,
+    idMunicipio,
   });
 }
 

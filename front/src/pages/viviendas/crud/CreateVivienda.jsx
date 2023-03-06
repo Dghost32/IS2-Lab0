@@ -1,5 +1,5 @@
 import { Autocomplete, Button, TextField } from "@mui/material";
-import { QueryClient, useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import React, { useState } from "react";
 import swal from "sweetalert";
 import { getMunicipios } from "../../../fetchers/municipios";
@@ -8,6 +8,8 @@ import { crearVivienda } from "../../../fetchers/viviendas";
 const CreateVivienda = () => {
   const [address, setAddress] = useState("");
   const [municipio, setMunicipio] = useState({});
+
+  const QueryClient = useQueryClient();
 
   const municipios = useQuery({
     queryKey: ["municipios"],
@@ -47,30 +49,6 @@ const CreateVivienda = () => {
       <h1 className="text-3xl font-bold mb-2">Crear Vivienda</h1>
 
       <form onSubmit={handleSubmit}>
-        <label htmlFor="municipio">Municipio</label>
-        <Autocomplete
-          options={municipios.data}
-          className="mb-3"
-          name="municipio"
-          getOptionLabel={(option) => option?.nombre}
-          value={municipio.nombre}
-          onChange={(_, value) => {
-            if (value) setMunicipio(value);
-          }}
-          noOptionsText="Sin resultados"
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              variant="outlined"
-              size="small"
-              style={{
-                width: "100%",
-                fontFamily: "'Noto Sans JP', sans-serif",
-              }}
-            />
-          )}
-        />
-
         <label htmlFor="address">Dirección</label>
         <TextField
           name="address"
@@ -84,6 +62,28 @@ const CreateVivienda = () => {
           }}
           value={address}
           onChange={(e) => setAddress(e.target.value)}
+        />
+
+        <label htmlFor="municipio">Municipio</label>
+        <Autocomplete
+          options={municipios.data}
+          getOptionLabel={(option) => option?.nombre || ""}
+          value={municipio}
+          onChange={async (_, value) => {
+            setMunicipio(value);
+          }}
+          noOptionsText="Sin resultados"
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              variant="outlined"
+              size="small"
+              style={{
+                width: "100%",
+                fontFamily: "'Noto Sans JP', sans-serif",
+              }}
+            />
+          )}
         />
 
         <Button

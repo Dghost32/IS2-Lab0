@@ -1,9 +1,11 @@
 import axios from "axios";
 
-export async function crearPersona({ nombre, edad }) {
+export async function crearPersona({ nombre, edad, isCabeza, personaACargo }) {
   return await axios.post("http://localhost:4000/personas", {
     nombre,
     edad,
+    isCabeza,
+    personaACargo,
   });
 }
 

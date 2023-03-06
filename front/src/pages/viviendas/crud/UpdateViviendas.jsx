@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { QueryClient, useMutation, useQuery } from "@tanstack/react-query";
+import React, { useEffect, useState } from "react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Autocomplete, Skeleton, TextField, Button } from "@mui/material";
 import { getViviendas, updateVivienda } from "../../../fetchers/viviendas";
 import swal from "sweetalert";
@@ -9,6 +9,8 @@ const UpdateVivienda = () => {
   const [newAddress, setNewAddress] = useState("");
   const [municipio, setMunicipio] = useState({});
   const [vivienda, setVivienda] = useState();
+
+  const QueryClient = useQueryClient();
 
   const viviendas = useQuery({
     queryKey: ["viviendas"],
@@ -44,6 +46,10 @@ const UpdateVivienda = () => {
     },
   });
 
+  useEffect(() => {
+    setNewAddress(vivienda?.direccion);
+  }, [vivienda]);
+
   if (viviendas.isLoading) {
     return (
       <>
@@ -69,11 +75,13 @@ const UpdateVivienda = () => {
 
       <Autocomplete
         options={viviendas.data}
-        getOptionLabel={(option) => option?.name}
+        getOptionLabel={(option) =>
+          `${option?.direccion} - ${option.municipio}`
+        }
         value={vivienda}
         onChange={(_, value) => {
           setVivienda(value);
-          setNewAddress(value?.name);
+          setNewAddress(value?.nombre);
         }}
         noOptionsText="Sin resultados"
         renderInput={(params) => (
@@ -93,7 +101,11 @@ const UpdateVivienda = () => {
         <form
           onSubmit={(e) => {
             e.preventDefault();
-            update.mutate({ id: vivienda?.id, nombre: newAddress });
+            update.mutate({
+              id: vivienda?.id,
+              direccion: newAddress,
+              idMunicipio: municipio?.id,
+            });
           }}
           className="mt-5"
         >
@@ -117,7 +129,7 @@ const UpdateVivienda = () => {
             name="municipio"
             options={municipios.data}
             className="mb-2"
-            getOptionLabel={(option) => option?.name || ""}
+            getOptionLabel={(option) => option?.nombre || ""}
             value={municipio}
             onChange={(_, value) => {
               setMunicipio(value);
