@@ -1,22 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { MDBDataTable } from "mdbreact";
-import { getMunicipios } from "../../../fetchers/municipios";
-import { municipios_cols } from "../../../shared/data/columns";
+import { personas_cols } from "../../../shared/data/columns";
 import { Skeleton } from "@mui/material";
+import { getPersonas } from "../../../fetchers/personas";
 
 const ReadPersonas = () => {
   const [columns, setColumns] = useState([]);
-  const municipios = useQuery({
-    queryKey: ["municipios"],
-    queryFn: getMunicipios,
+  const personas = useQuery({
+    queryKey: ["personas"],
+    queryFn: getPersonas,
   });
 
   useEffect(() => {
-    setColumns(municipios_cols);
+    setColumns(personas_cols);
   }, []);
 
-  if (municipios.isLoading) {
+  if (personas.isLoading) {
     return (
       <>
         <h1 className="text-3xl font-bold mb-2">Ver Personas</h1>
@@ -29,11 +29,11 @@ const ReadPersonas = () => {
     );
   }
 
-  if (municipios.isError) {
+  if (personas.isError) {
     return (
       <>
         <h1 className="text-3xl font-bold mb-2">Ver Personas</h1>
-        <p>Error: {municipios.error.message}</p>
+        <p>Error: {personas.error.message}</p>
       </>
     );
   }
@@ -52,7 +52,7 @@ const ReadPersonas = () => {
         bordered
         data={{
           columns,
-          rows: municipios?.data || [],
+          rows: personas?.data || [],
         }}
         noBottomColumns
         order={["name", "asc"]}

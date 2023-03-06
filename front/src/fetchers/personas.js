@@ -1,22 +1,24 @@
 import axios from "axios";
 
-export async function crearPersona({ nombre }) {
-  return await axios.post("http://localhost:3001/personas", {
+export async function crearPersona({ nombre, edad }) {
+  return await axios.post("http://localhost:4000/personas", {
     nombre,
+    edad,
   });
 }
 
 export async function getPersonas() {
-  const data = await axios.get("https://jsonplaceholder.typicode.com/users");
+  const data = await axios.get("http://localhost:4000/personas");
   return data.data;
 }
 
-export async function updatePersona({ id, nombre }) {
-  return await axios.put(`http://localhost:3001/personas/${id}`, {
+export async function updatePersona({ id, nombre, edad }) {
+  return await axios.put(`http://localhost:4000/personas/${id}`, {
     nombre,
+    edad,
   });
 }
 
 export async function deletePersona({ id }) {
-  return await axios.delete(`http://localhost:3001/personas/${id}`);
+  return await axios.delete(`http://localhost:4000/personas/${id}`);
 }

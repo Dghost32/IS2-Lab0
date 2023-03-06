@@ -52,8 +52,8 @@ const CreateVivienda = () => {
           options={municipios.data}
           className="mb-3"
           name="municipio"
-          getOptionLabel={(option) => option?.name}
-          value={municipio.name}
+          getOptionLabel={(option) => option?.nombre}
+          value={municipio.nombre}
           onChange={(_, value) => {
             if (value) setMunicipio(value);
           }}

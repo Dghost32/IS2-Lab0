@@ -1,5 +1,5 @@
 import { Button, TextField } from "@mui/material";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import React, { useState } from "react";
 import swal from "sweetalert";
 import { crearPersona } from "../../../fetchers/personas";
@@ -8,18 +8,24 @@ const CreatePersona = () => {
   const [nombre, setNombre] = useState("");
   const [edad, setEdad] = useState(0);
 
+  let QueryClient = useQueryClient();
+
   const create = useMutation({
     mutationFn: crearPersona,
     onSuccess: async () => {
       await swal({
-        title: "Municipio creado",
-        text: "El municipio se ha creado correctamente",
+        title: "Persona creada",
+        text: "La persona se ha creado correctamente",
         icon: "success",
+      });
+
+      QueryClient.invalidateQueries({
+        queryKey: ["personas"],
       });
     },
     onError: async (error) => {
       await swal({
-        title: "Error al crear el municipio",
+        title: "Error al crear la persona",
         text: `${error}`,
         icon: "error",
       });

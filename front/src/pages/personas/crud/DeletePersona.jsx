@@ -1,38 +1,40 @@
 import React from "react";
-import { QueryClient, useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Autocomplete, Skeleton, TextField, Button } from "@mui/material";
-import { deleteMunicipio, getMunicipios } from "../../../fetchers/municipios";
+import { deletePersona, getPersonas } from "../../../fetchers/personas";
 import swal from "sweetalert";
 
 const DeletePersona = () => {
-  const municipios = useQuery({
-    queryKey: ["municipios"],
-    queryFn: getMunicipios,
+  const QueryClient = useQueryClient();
+
+  const personas = useQuery({
+    queryKey: ["personas"],
+    queryFn: getPersonas,
   });
 
   const del = useMutation({
-    mutationFn: deleteMunicipio,
+    mutationFn: deletePersona,
 
     onSuccess: async () => {
       await swal({
-        title: "Municipio eliminado",
+        title: "Personas eliminada",
         icon: "success",
       });
 
       QueryClient.invalidateQueries({
-        queryKey: ["municipios"],
+        queryKey: ["personas"],
       });
     },
 
     onError: async () => {
       await swal({
-        title: "Error al eliminar el municipio",
+        title: "Error al eliminar la persona",
         icon: "error",
       });
     },
   });
 
-  if (municipios.isLoading) {
+  if (personas.isLoading) {
     return (
       <>
         <h1 className="text-3xl font-bold mb-2">Eliminar Persona</h1>
@@ -42,11 +44,11 @@ const DeletePersona = () => {
     );
   }
 
-  if (municipios.isError) {
+  if (personas.isError) {
     return (
       <>
         <h1 className="text-3xl font-bold mb-2">Eliminar Persona</h1>
-        <p>Error al cargar los municipios</p>
+        <p>Error al cargar los personas</p>
       </>
     );
   }
@@ -56,14 +58,14 @@ const DeletePersona = () => {
       <h1 className="text-3xl font-bold mb-2">Eliminar Persona</h1>
 
       <Autocomplete
-        options={municipios.data}
-        getOptionLabel={(option) => option?.name}
-        value={{ name: "Seleccione un municipio para eliminarlo" }}
+        options={personas.data}
+        getOptionLabel={(option) => option?.nombre}
+        value={{ nombre: "Seleccione una persona para eliminarlo" }}
         onChange={async (_, value) => {
           if (value) {
             const check = await swal({
               title: "¿Estás seguro?",
-              text: `Se eliminará el municipio ${value?.name}`,
+              text: `Se eliminará la persona ${value?.nombre}`,
               icon: "warning",
               buttons: true,
               dangerMode: true,

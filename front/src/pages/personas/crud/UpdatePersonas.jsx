@@ -1,43 +1,53 @@
-import React, { useState } from "react";
-import { QueryClient, useMutation, useQuery } from "@tanstack/react-query";
+import React, { useEffect, useState } from "react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Autocomplete, Skeleton, TextField, Button } from "@mui/material";
-import { getMunicipios, updateMunicipio } from "../../../fetchers/municipios";
 import swal from "sweetalert";
+import { getPersonas, updatePersona } from "../../../fetchers/personas";
 
 const UpdatePersona = () => {
+  const [persona, setPersona] = useState();
   const [newName, setNewName] = useState("");
-  const [municipio, setMunicipio] = useState();
+  const [newEdad, setNewEdad] = useState(0);
 
-  const municipios = useQuery({
-    queryKey: ["municipios"],
-    queryFn: getMunicipios,
+  const QueryClient = useQueryClient();
+
+  useEffect(() => {
+    if (persona) {
+      setNewName(persona.nombre);
+      setNewEdad(persona.edad);
+    }
+  }, [persona]);
+
+  const personas = useQuery({
+    queryKey: ["personas"],
+    queryFn: getPersonas,
   });
 
   const update = useMutation({
-    mutationFn: updateMunicipio,
+    mutationFn: updatePersona,
 
     onSuccess: async () => {
-      setMunicipio(null);
+      setPersona(null);
       setNewName("");
       await swal({
-        title: "Municipio actualizado",
+        title: "persona actualizada",
         icon: "success",
       });
 
       QueryClient.invalidateQueries({
-        queryKey: ["municipios"],
+        queryKey: ["personas"],
       });
     },
 
     onError: async () => {
       await swal({
-        title: "Error al actualizar el municipio",
+        title: "Error al actualizar a la persona",
         icon: "error",
       });
     },
   });
 
-  if (municipios.isLoading) {
+  if (personas.isLoading) {
     return (
       <>
         <h1 className="text-3xl font-bold mb-2">Actualizar Persona</h1>
@@ -47,11 +57,11 @@ const UpdatePersona = () => {
     );
   }
 
-  if (municipios.isError) {
+  if (personas.isError) {
     return (
       <>
         <h1 className="text-3xl font-bold mb-2">Actualizar Persona</h1>
-        <p>Error al cargar los municipios</p>
+        <p>Error al cargar los personas</p>
       </>
     );
   }
@@ -61,12 +71,12 @@ const UpdatePersona = () => {
       <h1 className="text-3xl font-bold mb-2">Actualizar Persona</h1>
 
       <Autocomplete
-        options={municipios.data}
-        getOptionLabel={(option) => option?.name}
-        value={municipio}
+        options={personas.data}
+        getOptionLabel={(option) => option?.nombre}
+        value={persona}
         onChange={(_, value) => {
-          setMunicipio(value);
-          setNewName(value?.name);
+          setPersona(value);
+          setNewName(value?.nombre);
         }}
         noOptionsText="Sin resultados"
         renderInput={(params) => (
@@ -82,11 +92,11 @@ const UpdatePersona = () => {
         )}
       />
 
-      {municipio && (
+      {persona && (
         <form
           onSubmit={(e) => {
             e.preventDefault();
-            update.mutate({ id: municipio?.id, nombre: newName });
+            update.mutate({ id: persona?.id, nombre: newName, edad: newEdad });
           }}
           className="mt-5"
         >
@@ -102,7 +112,7 @@ const UpdatePersona = () => {
               width: "100%",
               fontFamily: "'Noto Sans JP', sans-serif",
             }}
-            value={municipio?.id}
+            value={persona?.id}
           />
 
           <label htmlFor="name">Nombre</label>
@@ -119,8 +129,25 @@ const UpdatePersona = () => {
             value={newName}
             onChange={(e) => setNewName(e.target.value)}
           />
+
+          <label htmlFor="edad">Edad</label>
+          <TextField
+            name="edad"
+            id="outlined-basic"
+            type="number"
+            variant="outlined"
+            size="small"
+            style={{
+              margin: "0 0 1rem 0",
+              width: "100%",
+              fontFamily: "'Noto Sans JP', sans-serif",
+            }}
+            value={newEdad}
+            onChange={(e) => setNewEdad(e.target.value)}
+          />
+
           <Button
-            disabled={!newName || municipio?.name === newName}
+            disabled={!newName || persona?.name === newName}
             variant="contained"
             type="submit"
           >
