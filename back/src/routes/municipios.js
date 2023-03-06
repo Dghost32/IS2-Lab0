@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const pool = require('../database');
 
-router.get('/municipios', (req, res) => {
+router.get('/', (req, res) => {
     //realiza una consulta a la base de datos sql
     pool.query('SELECT * FROM municipios', (err, rows) => {
         if (err) {
@@ -13,7 +13,7 @@ router.get('/municipios', (req, res) => {
 });
 
 //post municipios database
-router.post('/municipios', async (req, res) => {
+router.post('/', async (req, res) => {
     const { nombre } = req.body;
     if(!nombre)return res.status(400).json('Falta el nombre del municipio');
     const newMunicipio = {
@@ -23,7 +23,7 @@ router.post('/municipios', async (req, res) => {
     return res.status(200).json({ message: 'Municipio saved' });
 });
 
-router.put('/municipios/:id', async (req, res) => {
+router.put('/:id', async (req, res) => {
     const { id } = req.params;
     const { nombre } = req.body;
     if(!nombre)return res.status(400).json('Falta el nombre del municipio');
@@ -34,7 +34,7 @@ router.put('/municipios/:id', async (req, res) => {
     return res.status(200).json({ message: 'Municipio updated' });
 });
 
-router.delete('/municipios/:id', async (req, res) => {
+router.delete('/:id', async (req, res) => {
     const { id } = req.params;
     await pool.query('DELETE FROM municipios WHERE id = ?', [id]);
     return res.status(200).json({ message: 'Municipio deleted' });
